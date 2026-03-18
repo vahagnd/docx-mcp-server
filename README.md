@@ -11,18 +11,18 @@ uv run --env-file .env python src/server.py
 
 ---
 
-## Claude Desktop Configuration
+## Cline Configuration
 
-Add this block to your `claude_desktop_config.json`:
+Add this block to your `cline_mcp_settings.json`:
 
 ```json
 {
   "mcpServers": {
     "docx-mcp-server": {
-      "url": "http://localhost:8755/mcp",
-      "type": "streamableHttp",
-      "disabled": false,
-      "autoApprove": []
+      "command": "uv",
+      "args": ["run", "src/server.py"],
+      "type": "stdio",
+      "cwd": "path/to/docx-mcp-server"
     }
   }
 }
