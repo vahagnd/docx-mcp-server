@@ -6,7 +6,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.table import _Cell
 from docx.text.paragraph import Paragraph
 
-from models import ParagraphInfo
+from src.models import ParagraphInfo
 
 ALIGN_MAP = {
     "left": WD_ALIGN_PARAGRAPH.LEFT,

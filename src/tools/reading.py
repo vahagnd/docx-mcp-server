@@ -2,8 +2,8 @@
 
 import json
 
-from models import CoreProperties, DocumentInfo, ParagraphInfo, TableInfo
-from utils import cell_text, load, paragraph_to_dict
+from src.models import CoreProperties, DocumentInfo, ParagraphInfo, TableInfo
+from src.utils import cell_text, load, paragraph_to_dict
 
 
 def read_docx(path: str) -> str:
@@ -75,7 +75,7 @@ def list_paragraphs(path: str, start: int = 0, end: int | None = None) -> str:
     result: list[ParagraphInfo] = [
         paragraph_to_dict(p, start + i) for i, p in enumerate(paras)
     ]
-    return json.dumps([p.model_dump_json() for p in result], indent=2)
+    return json.dumps([p.model_dump() for p in result], indent=2)
 
 
 def read_table(path: str, table_index: int = 0) -> str:

@@ -67,3 +67,12 @@ Add this block to your `cline_mcp_settings.json`:
 | `delete_paragraph(path, index)` | Remove a paragraph by index |
 | `set_core_properties(path, title?, author?, subject?, keywords?, comments?)` | Update document metadata |
 | `merge_documents(base_path, other_path, output_path, add_page_break_between?)` | Merge two documents into one |
+
+
+## Tests
+### To run tests use
+```bash
+make run-tests
+make run-tests -- -s
+make run-tests -- -k get_document -vs
+```
