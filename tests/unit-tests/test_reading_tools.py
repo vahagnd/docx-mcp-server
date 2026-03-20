@@ -11,6 +11,7 @@ from src.tools.reading import (
 )
 
 
+# ----- read_docx -----
 @pytest.mark.parametrize(
     "docx_path, expected_result, expected_exception",
     [
@@ -33,20 +34,17 @@ def test_read_docx(docx_path, expected_result, expected_exception, request):
     assert result == expected_result
 
 
-# =============================================================================
-
-
+# ----- get_document -----
 @pytest.mark.parametrize(
-    "docx_path, expected_exception, flag",
+    "docx_path, expected_exception",
     [
-        ("rich_docx_path", None, "rich"),
-        ("empty_docx_path", None, "empty"),
-        ("nonexistent_docx_path", FileNotFoundError, None),
-        ("not_docx_path", ValueError, None),
+        ("simple_docx_path", None),
+        ("nonexistent_docx_path", FileNotFoundError),
+        ("not_docx_path", ValueError),
     ],
-    ids=["rich", "empty", "nonexistent", "not_a_docx"],
+    ids=["simple", "nonexistent", "not_docx"],
 )
-def test_get_document(docx_path, expected_exception, flag, request):
+def test_get_document(docx_path, expected_exception, request):
     docx_path = request.getfixturevalue(docx_path)
     if expected_exception is not None:
         with pytest.raises(expected_exception):
@@ -54,70 +52,81 @@ def test_get_document(docx_path, expected_exception, flag, request):
         return
 
     result = json.loads(get_document_info(docx_path))
-    if flag == "rich":
-        assert result["paragraph_count"] == 2
-        assert result["table_count"] == 1
-        assert result["section_count"] == 1
-        assert "Heading 1" in result["styles_used"]
-        assert "Normal" in result["styles_used"]
-        table = result["tables"][0]
-        assert table["table_index"] == 0
-        assert table["rows"] == 2
-        assert table["columns"] == 3
-    elif flag == "empty":
-        assert result["paragraph_count"] == 0
-        assert result["table_count"] == 0
-        assert result["section_count"] == 1
-        assert result["styles_used"] == []
-        assert result["tables"] == []
     assert "title" in result["core_properties"]
     assert "author" in result["core_properties"]
 
 
-# =============================================================================
+def test_get_document_rich(rich_docx_path):
+    result = json.loads(get_document_info(rich_docx_path))
+    assert result["paragraph_count"] == 2
+    assert result["table_count"] == 1
+    assert result["section_count"] == 1
+    assert "Heading 1" in result["styles_used"]
+    assert "Normal" in result["styles_used"]
+    table = result["tables"][0]
+    assert table["table_index"] == 0
+    assert table["rows"] == 2
+    assert table["columns"] == 3
 
 
+def test_get_document_empty(empty_docx_path):
+    result = json.loads(get_document_info(empty_docx_path))
+    assert result["paragraph_count"] == 0
+    assert result["table_count"] == 0
+    assert result["section_count"] == 1
+    assert result["styles_used"] == []
+    assert result["tables"] == []
+
+
+# ----- list_paragraphs -----
 @pytest.mark.parametrize(
-    "docx_path, expected_exception, start, end, flag",
+    "docx_path, expected_exception",
     [
-        ("rich_docx_path", None, 0, None, "all"),
-        ("rich_docx_path", None, 1, None, "slice"),
-        ("rich_docx_path", None, 0, 1, "start_end"),
-        ("empty_docx_path", None, 0, None, "empty"),
-        ("nonexistent_docx_path", FileNotFoundError, 0, None, None),
-        ("not_docx_path", ValueError, 0, None, None),
+        ("simple_docx_path", None),
+        ("nonexistent_docx_path", FileNotFoundError),
+        ("not_docx_path", ValueError),
     ],
-    ids=["all", "slice", "start_end", "empty", "nonexistent", "not_a_docx"],
+    ids=["simple", "nonexistent", "not_docx"],
 )
-def test_list_paragraphs(docx_path, expected_exception, start, end, flag, request):
+def test_list_paragraphs(docx_path, expected_exception, request):
     docx_path = request.getfixturevalue(docx_path)
     if expected_exception is not None:
         with pytest.raises(expected_exception):
-            list_paragraphs(docx_path, start=start, end=end)
+            list_paragraphs(docx_path)
         return
 
-    result = json.loads(list_paragraphs(docx_path, start=start, end=end))
-    print(f"{result=}\n")
-    if flag == "all":
-        assert len(result) == 2
-        assert result[0]["index"] == 0
-        assert result[0]["text"] == "Hello"
-        assert result[1]["index"] == 1
-        assert result[1]["text"] == "World"
-    elif flag == "slice":
-        assert len(result) == 1
-        assert result[0]["index"] == 1
-        assert result[0]["text"] == "World"
-    elif flag == "start_end":
-        assert len(result) == 1
-        assert result[0]["text"] == "Hello"
-    elif flag == "empty":
-        assert result == []
+    result = json.loads(list_paragraphs(docx_path))
+    assert isinstance(result, list)
 
 
-# =============================================================================
+def test_list_paragraphs_all(rich_docx_path):
+    result = json.loads(list_paragraphs(rich_docx_path))
+    assert len(result) == 2
+    assert result[0]["index"] == 0
+    assert result[0]["text"] == "Hello"
+    assert result[1]["index"] == 1
+    assert result[1]["text"] == "World"
 
 
+def test_list_paragraphs_slice(rich_docx_path):
+    result = json.loads(list_paragraphs(rich_docx_path, start=1))
+    assert len(result) == 1
+    assert result[0]["index"] == 1
+    assert result[0]["text"] == "World"
+
+
+def test_list_paragraphs_start_end(rich_docx_path):
+    result = json.loads(list_paragraphs(rich_docx_path, start=0, end=1))
+    assert len(result) == 1
+    assert result[0]["text"] == "Hello"
+
+
+def test_list_paragraphs_empty(empty_docx_path):
+    result = json.loads(list_paragraphs(empty_docx_path))
+    assert result == []
+
+
+# ----- read_table -----
 @pytest.mark.parametrize(
     "docx_path, expected_exception, table_index",
     [
@@ -140,9 +149,7 @@ def test_read_table(docx_path, expected_exception, table_index, request):
     assert result == [["A", "B", "C"], ["D", "E", "F"]]
 
 
-# =============================================================================
-
-
+# ----- list_styles -----
 @pytest.mark.parametrize(
     "docx_path, expected_exception",
     [
