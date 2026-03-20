@@ -26,7 +26,7 @@ def nonexistent_docx_path():
 
 
 @pytest.fixture
-def not_a_docx_path(tmp_path):
+def not_docx_path(tmp_path):
     path = tmp_path / "file.txt"
     path.write_text("hello")
     return str(path)
@@ -56,3 +56,13 @@ def table_docx_path(tmp_path):
     path = tmp_path / "table.docx"
     doc.save(str(path))
     return str(path)
+
+
+@pytest.fixture
+def new_docx_path(tmp_path):
+    return str(tmp_path / "new.docx")
+
+
+@pytest.fixture
+def new_not_docx_path(tmp_path):
+    return str(tmp_path / "new.txt")

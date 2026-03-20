@@ -5,7 +5,7 @@ from typing import Optional
 
 from docx import Document
 
-from utils import save
+from src.utils import save
 
 
 def create_docx(
@@ -18,9 +18,9 @@ def create_docx(
     Create a new, empty .docx file.
 
     Args:
-        path:      Destination path (must end with .docx).
-        title:     Optional document title stored in core properties.
-        author:    Optional author name stored in core properties.
+        path: Full destination path (must end with .docx).
+        title: Optional document title stored in core properties.
+        author: Optional author name stored in core properties.
         overwrite: If False (default), raise an error if the file already exists.
 
     Returns:
@@ -37,4 +37,4 @@ def create_docx(
     if author:
         doc.core_properties.author = author
     save(doc, path)
-    return f"Created: {path}"
+    return path

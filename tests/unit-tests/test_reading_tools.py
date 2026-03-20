@@ -17,7 +17,7 @@ from src.tools.reading import (
         ("simple_docx_path", "Hello\nWorld", None),
         ("empty_docx_path", "", None),
         ("nonexistent_docx_path", None, FileNotFoundError),
-        ("not_a_docx_path", None, ValueError),
+        ("not_docx_path", None, ValueError),
     ],
     ids=["simple", "empty", "nonexistent", "not_a_docx"],
 )
@@ -42,7 +42,7 @@ def test_read_docx(docx_path, expected_result, expected_exception, request):
         ("rich_docx_path", None, "rich"),
         ("empty_docx_path", None, "empty"),
         ("nonexistent_docx_path", FileNotFoundError, None),
-        ("not_a_docx_path", ValueError, None),
+        ("not_docx_path", ValueError, None),
     ],
     ids=["rich", "empty", "nonexistent", "not_a_docx"],
 )
@@ -85,7 +85,7 @@ def test_get_document(docx_path, expected_exception, flag, request):
         ("rich_docx_path", None, 0, 1, "start_end"),
         ("empty_docx_path", None, 0, None, "empty"),
         ("nonexistent_docx_path", FileNotFoundError, 0, None, None),
-        ("not_a_docx_path", ValueError, 0, None, None),
+        ("not_docx_path", ValueError, 0, None, None),
     ],
     ids=["all", "slice", "start_end", "empty", "nonexistent", "not_a_docx"],
 )
@@ -125,7 +125,7 @@ def test_list_paragraphs(docx_path, expected_exception, start, end, flag, reques
         ("table_docx_path", IndexError, 5),
         ("empty_docx_path", IndexError, 0),
         ("nonexistent_docx_path", FileNotFoundError, 0),
-        ("not_a_docx_path", ValueError, 0),
+        ("not_docx_path", ValueError, 0),
     ],
     ids=["table", "table_index_out_of_range", "empty", "nonexistent", "not_a_docx"],
 )
@@ -148,7 +148,7 @@ def test_read_table(docx_path, expected_exception, table_index, request):
     [
         ("simple_docx_path", None),
         ("nonexistent_docx_path", FileNotFoundError),
-        ("not_a_docx_path", ValueError),
+        ("not_docx_path", ValueError),
     ],
     ids=["simple", "nonexistent", "not_a_docx"],
 )

@@ -16,18 +16,24 @@ ALIGN_MAP = {
 }
 
 
+def validate_docx_path(path: str) -> None:
+    if not path.endswith(".docx"):
+        raise ValueError(f"Not a .docx file: {path}")
+
+
 def load(path: str) -> DocumentObject:
+    validate_docx_path(path)
     p = Path(path)
     if not p.exists():
         raise FileNotFoundError(f"File not found: {path}")
-    if p.suffix.lower() != ".docx":
-        raise ValueError(f"Not a .docx file: {path}")
     return Document(str(p))
 
 
 def save(doc: DocumentObject, path: str) -> None:
+    validate_docx_path(path)
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     doc.save(path)
+    return None
 
 
 def paragraph_to_dict(para: Paragraph, index: int) -> ParagraphInfo:
