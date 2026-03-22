@@ -4,10 +4,15 @@ An MCP server that exposes tools for reading, creating, and editing Microsoft Wo
 
 ## Running the Server
 
+### Install dependencies
 ```bash
-make project-init
 cp .env.example .env
-uv run --env-file .env python -m src.server
+make project-init
+```
+
+### Start server
+```bash
+make server-start
 ```
 
 ---
@@ -17,12 +22,18 @@ uv run --env-file .env python -m src.server
 Add this block to your `cline_mcp_settings.json`:
 
 ```json
-{
-  "mcpServers": {
+{  "mcpServers": {
     "docx-mcp-server": {
-      "command": "uv",
-      "args": ["run", "src/server.py"],
       "type": "stdio",
+      "command": "uv",
+      "args": [
+        "run",
+        "--env-file",
+        ".env",
+        "python",
+        "-m",
+        "src.server"
+      ],
       "cwd": "path/to/docx-mcp-server"
     }
   }
@@ -71,10 +82,14 @@ Add this block to your `cline_mcp_settings.json`:
 
 
 ## Tests
-### To run tests use
+
+### Install dependencies
 ```bash
 make project-init-dev
+```
 
+### Run tests
+```bash
 make run-tests
 make run-tests -- -s
 make run-tests -- -k get_document -vs
