@@ -2,8 +2,8 @@
 
 from mcp.server.fastmcp import FastMCP
 
-from settings import mcp_run_settings, mcp_server_settings
-from tools import adding_content, creating, editing, reading
+from src.settings import mcp_run_settings, mcp_server_settings
+from src.tools import adding_content, creating, editing, reading
 
 mcp = FastMCP(
     name="docx-mcp-server",

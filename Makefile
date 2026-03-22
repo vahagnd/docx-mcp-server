@@ -1,11 +1,11 @@
 # Dont use those yet
-server-start-daemon:
+server-docker-start-daemon:
 	docker compose up -d --remove-orphans
-server-start:
+server-docker-start:
 	docker compose up --remove-orphans
-server-stop:
+server-docker-stop:
 	docker compose down
-server-restart: server-stop server-start
+server-docker-restart: server-docker-stop server-docker-start
 
 # Init
 project-init:
@@ -13,8 +13,12 @@ project-init:
 project-init-dev:
 	uv sync --extra dev
 
+# Run server
+server-start:
+	uv run python -m src.server
+
 # Testing
 run-tests:
-	PYTHONPATH=$(PWD) uv run pytest tests $(filter-out run-tests,$(MAKECMDGOALS))
+	PYTHONPATH=$(PWD) uv run --env-file .env pytest tests $(filter-out run-tests,$(MAKECMDGOALS))
 %:
 	@:

@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import pytest
@@ -23,8 +24,10 @@ def test_create_docx(docx_path, expected_exception, request):
             create_docx(docx_path)
         return
 
-    result = create_docx(docx_path, title="My Title", author="John")
-    assert result == docx_path
+    result = json.loads(create_docx(docx_path, title="My Title", author="John"))
+    assert result["path"] == docx_path
+    assert result["title"] == "My Title"
+    assert result["author"] == "John"
     assert Path(docx_path).exists()
 
     doc = Document(docx_path)
@@ -33,5 +36,5 @@ def test_create_docx(docx_path, expected_exception, request):
 
 
 def test_create_docx_overwrite(simple_docx_path):
-    result = create_docx(simple_docx_path, overwrite=True)
-    assert result == simple_docx_path
+    result = json.loads(create_docx(simple_docx_path, overwrite=True))
+    assert result["path"] == simple_docx_path

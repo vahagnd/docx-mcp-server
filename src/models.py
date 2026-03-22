@@ -1,4 +1,10 @@
-from pydantic import BaseModel, Field
+from typing import Any
+
+from pydantic import BaseModel, Field, RootModel
+
+
+class ListReturn[T=Any](RootModel[list[T]]):
+    root: list[T]
 
 
 class ParagraphInfo(BaseModel):
@@ -54,3 +60,13 @@ class DocumentInfo(BaseModel):
     core_properties: CoreProperties = Field(
         description="Word's built-in document metadata"
     )
+
+
+class StyleGroups(RootModel):
+    root: dict[str, list[str]]
+
+
+class DocxCreated(BaseModel):
+    path: str = Field(description="Absolute path to the created .docx file.")
+    title: str | None = Field(default=None, description="Document title stored in core properties.")
+    author: str | None = Field(default=None, description="Author name stored in core properties.")

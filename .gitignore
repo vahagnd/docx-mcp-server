@@ -8,3 +8,5 @@ wheels/
 .env
 *cache/
 *.log
+.DS_Store
+.ipynb_checkpoints/

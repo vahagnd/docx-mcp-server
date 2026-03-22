@@ -5,7 +5,7 @@ from typing import Optional
 
 from docx.shared import Inches, Pt
 
-from utils import load, resolve_align, save
+from src.utils import load, resolve_align, save
 
 
 def add_paragraph(

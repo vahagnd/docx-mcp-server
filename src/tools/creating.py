@@ -1,11 +1,8 @@
 """Creating tools for MCP server"""
 
-from pathlib import Path
 from typing import Optional
 
-from docx import Document
-
-from src.utils import save
+from src.core import creating
 
 
 def create_docx(
@@ -24,17 +21,6 @@ def create_docx(
         overwrite: If False (default), raise an error if the file already exists.
 
     Returns:
-        Confirmation message with the file path.
+        JSON confirmation object with path, title, and author of the created document.
     """
-    p = Path(path)
-    if p.exists() and not overwrite:
-        raise FileExistsError(
-            f"{path} already exists. Pass overwrite=True to replace it."
-        )
-    doc = Document()
-    if title:
-        doc.core_properties.title = title
-    if author:
-        doc.core_properties.author = author
-    save(doc, path)
-    return path
+    return creating.create_docx(path, title, author, overwrite).model_dump_json()

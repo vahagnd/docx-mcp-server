@@ -7,7 +7,7 @@ An MCP server that exposes tools for reading, creating, and editing Microsoft Wo
 ```bash
 make project-init
 cp .env.example .env
-uv run --env-file .env python src/server.py
+uv run --env-file .env python -m src.server
 ```
 
 ---
