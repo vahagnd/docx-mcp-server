@@ -6,3 +6,5 @@ wheels/
 *.egg-info
 .venv
 .env
+*cache/
+*.log

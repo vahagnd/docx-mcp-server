@@ -5,6 +5,7 @@ An MCP server that exposes tools for reading, creating, and editing Microsoft Wo
 ## Running the Server
 
 ```bash
+make project-init
 cp .env.example .env
 uv run --env-file .env python src/server.py
 ```
@@ -72,6 +73,8 @@ Add this block to your `cline_mcp_settings.json`:
 ## Tests
 ### To run tests use
 ```bash
+make project-init-dev
+
 make run-tests
 make run-tests -- -s
 make run-tests -- -k get_document -vs
